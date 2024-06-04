@@ -8,6 +8,12 @@ class ProductService {
     const products = await this.products.find();
     return products;
   }
+
+  public async decrease(id: string, qtyToDecrease: Number) {
+    await this.products.findByIdAndUpdate(id, {
+      $inc: { quantity: -qtyToDecrease }
+    })
+  }
 }
 
 export default ProductService;

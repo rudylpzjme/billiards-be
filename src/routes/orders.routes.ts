@@ -15,6 +15,7 @@ class OrderRoutes implements Routes {
     this.router.get(`${this.path}`, this.ordersController.getOrders);
     this.router.post(`${this.path}`, this.ordersController.createOrder);
     this.router.patch(`${this.path}/:id`, this.ordersController.updateOrder);
+    this.router.patch(`${this.path}/:id/pay`, this.ordersController.payOrder);
   }
 }
 

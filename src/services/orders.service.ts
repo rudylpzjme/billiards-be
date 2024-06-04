@@ -1,4 +1,4 @@
-import { Order } from '../models/order.model';
+import { Cart, Order } from '../models/order.model';
 import orderModel from '../schemas/orders.schema';
 import { isEmpty } from '../utils/utils';
 
@@ -20,15 +20,36 @@ class OrdersService {
   public async createOrder(orderData: Order): Promise<Order> {
     if (isEmpty(orderData)) throw new Error("orderData is empty");
 
-    console.log("ORDER", orderData);
-    const createUserData: Order = await this.orders.create({
+    const createdOrder: Order = await this.orders.create({
       ...orderData,
     });
 
-    return createUserData;
+    return createdOrder;
   }
 
-  //findOneAndUpdate
+  public async updateOrder(id: string, cart: Cart): Promise<Order | null> {
+    if (isEmpty(cart)) throw new Error("cart data is empty");
+
+    const updatedOrder: Order | null = await this.orders.findOneAndUpdate({
+      _id: id,
+    }, {
+      cart,
+    });
+
+    return updatedOrder;
+  }
+
+  public async payOrder(id: string, status: string): Promise<Order | null> {
+    if (!status) throw new Error("status is empty");
+
+    const updatedOrder: Order | null = await this.orders.findOneAndUpdate({
+      _id: id,
+    }, {
+      status: status,
+    });
+
+    return updatedOrder;
+  }
 }
 
 export default OrdersService;

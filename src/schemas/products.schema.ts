@@ -14,7 +14,16 @@ export const productsSchema = new Schema({
     type: Number,
     required: true,
   },
+  quantity: {
+    type: Number,
+    required: true,
+  },
   title: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  type: {
     type: String,
     required: true,
     unique: true,
