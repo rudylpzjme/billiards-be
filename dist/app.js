@@ -16,11 +16,14 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const mongoose_1 = require("mongoose");
+const dotenv_1 = __importDefault(require("dotenv"));
+const config_1 = require("./configs/config");
 class App {
     constructor(routes) {
         this.allowedOrigins = ['http://localhost:3000'];
+        dotenv_1.default.config();
         this.app = (0, express_1.default)();
-        this.port = 3001;
+        this.port = config_1.config.server.port;
         this.app.use((0, cors_1.default)({
             origin: this.allowedOrigins
         }));

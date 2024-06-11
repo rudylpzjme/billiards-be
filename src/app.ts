@@ -3,6 +3,8 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { connect, disconnect } from "mongoose";
 import { Routes } from "./interfaces/routes.interfaces";
+import dotenv from 'dotenv'; 
+import { config } from "./configs/config";
 
 class App {
   public app: express.Application;
@@ -11,8 +13,9 @@ class App {
   private allowedOrigins = ['http://localhost:3000'];
 
   constructor(routes: Routes[]) {
+    dotenv.config();
     this.app = express();
-    this.port = 3001;
+    this.port = config.server.port;
 
     this.app.use(cors({
       origin: this.allowedOrigins
