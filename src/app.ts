@@ -10,7 +10,7 @@ class App {
   public app: express.Application;
   public port: string | number;
 
-  private allowedOrigins = ['http://localhost:3000'];
+  private allowedOrigins = ['http://localhost:3000', 'http://217.196.51.118:3000', 'http://217.196.51.118'];
 
   constructor(routes: Routes[]) {
     dotenv.config();
