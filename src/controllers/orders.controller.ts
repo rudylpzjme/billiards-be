@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import OrderService from "../services/orders.service";
 import { Cart, Order } from "../models/order.model";
 import ProductService from "../services/products.service";
-import { ItemCart } from "../models/products.model";
 
 class OrderController {
   public ordersService = new OrderService();
@@ -12,6 +11,29 @@ class OrderController {
       const orders: Order[] = await this.ordersService.findAll();
 
       res.status(200).json({ data: orders, message: 'findAll' })
+    } catch (error: unknown) {
+      next(error);
+    }
+  }
+
+  public getOrdersByDate = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const date = new Date(req.params.date);
+      const orders: Order[] = await this.ordersService.getOrdersByDate(date);
+
+      res.status(200).json({ data: orders, message: 'getOrderByDate' })
+    } catch (error: unknown) {
+      next(error);
+    }
+  }
+
+  public getOrdersByStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const status = req.params.status;
+      console.log("STATUS", status)
+      const orders: Order[] = await this.ordersService.getOrdersByStatus(status);
+
+      res.status(200).json({ data: orders, message: 'getOrderByStatus' })
     } catch (error: unknown) {
       next(error);
     }

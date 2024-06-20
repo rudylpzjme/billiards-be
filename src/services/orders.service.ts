@@ -1,6 +1,7 @@
 import { Cart, Order } from '../models/order.model';
 import orderModel from '../schemas/orders.schema';
 import { isEmpty } from '../utils/utils';
+import { endOfDay, startOfDay } from 'date-fns';
 
 class OrdersService {
   public orders = orderModel;
@@ -15,6 +16,25 @@ class OrdersService {
     // add try catch
     const order = await this.orders.findById(orderId);
     return order;
+  }
+
+  public async getOrdersByDate(date: Date): Promise<Order[]> {
+    // add try catch
+    const orders = await this.orders.find({
+      date: {
+        $gte: startOfDay(date),
+        $lte: endOfDay(date),
+      }
+    });
+    return orders;
+  }
+
+  public async getOrdersByStatus(status: string): Promise<Order[]> {
+    // add try catch
+    const orders = await this.orders.find({
+      status: status,
+    });
+    return orders;
   }
 
   public async createOrder(orderData: Order): Promise<Order> {
