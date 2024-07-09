@@ -5,6 +5,8 @@ import { connect, disconnect } from "mongoose";
 import { Routes } from "./interfaces/routes.interfaces";
 import dotenv from 'dotenv'; 
 import { config } from "./configs/config";
+import session from "express-session";
+import { inititializePassportStrategy } from "./configs/passport";
 
 class App {
   public app: express.Application;
@@ -21,8 +23,15 @@ class App {
       origin: this.allowedOrigins
     }));
     this.app.use(bodyParser.json());
+    this.app.use(session({
+      secret: "This is a secret",
+      resave: false,
+      saveUninitialized: false
+    }));
+
     this.connectToDatabase();
     this.initializeRoutes(routes);
+    inititializePassportStrategy(this.app);
   }
 
   public listen() {
