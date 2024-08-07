@@ -2,6 +2,7 @@ import { hash } from 'bcrypt';
 import { User } from '../models/users.model';
 import usersModel from '../schemas/users.schema';
 import { isEmpty } from '../utils/utils';
+import { UserError } from '../errors/user.error';
 
 class UserService {
   public users = usersModel;
@@ -30,10 +31,21 @@ class UserService {
   }
 
   public async createUser(userData: User): Promise<User> {
-    if (isEmpty(userData)) throw new Error("userData is empty");
+    if (isEmpty(userData)) {
+      throw new UserError({
+        name: "USER_DATA_EMPTY",
+        message: "User data is empty",
+      });
+    }
 
     const findUser: User | null = await this.users.findOne({ username: userData.username });
-    if (findUser) throw new Error(`The username: ${userData.email} already exists`);
+    // no permitir mismo username
+    if (findUser) {
+      throw new UserError({
+        name: "USER_ALREADY_EXISTS",
+        message: `El username: ${userData.email} ya existe`,
+      });
+    }
 
     const hashedPassword = await hash(userData.password, 10);
     const createUserData: User = await this.users.create({ ...userData, password: hashedPassword });

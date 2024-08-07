@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import UserService from '../services/users.service';
 import { User } from '../models/users.model';
+import { UserError } from '../errors/user.error';
 
 class UsersController {
   public usersService = new UserService();
@@ -31,8 +32,14 @@ class UsersController {
       const userData: User = req.body;
       const createUserData: User = await this.usersService.createUser(userData);
 
-      res.status(201).json({ data: createUserData, message: 'created' });
+      res.status(201).json({ message: `El usuario ${createUserData.username} se ha creado satisfactoriamente` });
     } catch (error) {
+      if (error instanceof UserError) {
+        res.status(409).json({
+          errorName: error.name,
+          errorMessage: error.message,
+        })
+      }
       next(error);
     }
   };
