@@ -4,7 +4,8 @@ import { Cart, Order } from "../models/order.model";
 import ProductService from "../services/products.service";
 
 class OrderController {
-  public ordersService = new OrderService();
+  private ordersService = new OrderService();
+  private productsService = new ProductService();
 
   public getOrders = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -53,6 +54,12 @@ class OrderController {
       } as Order;
 
       await this.ordersService.createOrder(order);
+
+      order.cart.line_items.forEach((item: any) => {
+        const {id, quantity} = item;
+        this.productsService.decrease(id, quantity);
+      });
+
       res.status(200).json({
         message: "OK"
       });
@@ -65,10 +72,23 @@ class OrderController {
     const id = req.params.id;
 
     try {
+      // get the order and restore the products qty to previous state
+      const order = await this.ordersService.getOrder(id);
+      order?.cart.line_items.forEach((item: any) => {
+        const {id, quantity} = item;
+        this.productsService.increase(id, quantity);
+      });
+
       const cart = {
           line_items: req.body.cart.lineItems,
           total: req.body.cart.total,
       } as Cart;
+
+      // update products qty to last state
+      cart.line_items.forEach((item: any) => {
+        const {id, quantity} = item;
+        this.productsService.decrease(id, quantity);
+      });
 
       await this.ordersService.updateOrder(id, cart);
       res.status(200).json({
@@ -81,19 +101,11 @@ class OrderController {
 
   public payOrder = async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-    const productsService = new ProductService();
 
     try {
       await this.ordersService.payOrder(id, req.body.status);
       res.status(200).json({
         message: "OK"
-      });
-      const order = await this.ordersService.getOrder(id);
-      order?.cart.line_items.forEach((item: any) => {
-        const {id, quantity} = item;
-        console.log(`Item: ${item}`);
-        console.log(`ID: ${id} QTY: ${quantity}`);
-        productsService.decrease(id, quantity);
       });
     } catch (error) {
       next(error);

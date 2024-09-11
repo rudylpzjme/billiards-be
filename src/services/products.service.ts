@@ -14,6 +14,12 @@ class ProductService {
       $inc: { quantity: -qtyToDecrease }
     })
   }
+
+  public async increase(id: string, qtyToIncrease: Number) {
+    await this.products.findByIdAndUpdate(id, {
+      $inc: { quantity: qtyToIncrease }
+    })
+  }
 }
 
 export default ProductService;
