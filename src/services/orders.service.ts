@@ -2,6 +2,7 @@ import { Cart, Order } from '../models/order.model';
 import orderModel from '../schemas/orders.schema';
 import { isEmpty } from '../utils/utils';
 import { endOfDay, startOfDay } from 'date-fns';
+import { toZonedTime } from "date-fns-tz";
 
 class OrdersService {
   public orders = orderModel;
@@ -22,8 +23,8 @@ class OrdersService {
     // add try catch
     const orders = await this.orders.find({
       date: {
-        $gte: startOfDay(date),
-        $lte: endOfDay(date),
+        $gte: startOfDay(toZonedTime(date, "America/Mexico_City")),
+        $lte: endOfDay(toZonedTime(date, "America/Mexico_City")),
       }
     });
     return orders;
