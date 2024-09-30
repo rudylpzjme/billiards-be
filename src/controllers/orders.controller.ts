@@ -69,9 +69,8 @@ class OrderController {
   }
 
   public updateOrder = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-
     try {
+      const id = req.params.id;
       // get the order and restore the products qty to previous state
       const order = await this.ordersService.getOrder(id);
       order?.cart.line_items.forEach((item: any) => {
@@ -100,9 +99,8 @@ class OrderController {
   }
 
   public payOrder = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-
     try {
+      const id = req.params.id;
       await this.ordersService.payOrder(id, req.body.status);
       res.status(200).json({
         message: "OK"

@@ -13,6 +13,7 @@ class ProductRoutes implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.productsController.getProducts);
+    this.router.patch(`${this.path}/:id`, this.productsController.updateProduct);
   }
 }
 
