@@ -27,7 +27,8 @@ class ProductService {
       throw new Error("Product data is empty");
     }
 
-    await this.products.create({...productData})
+    const product = await this.products.create({...productData});
+    return product;
   }
 
   public async updateProduct(
@@ -42,9 +43,6 @@ class ProductService {
     }
   ) {
     try {
-      // const { description, image, price, quantity, title, type } = productData;
-      console.log("PRODUCT DATA", productData);
-      console.log("PRODUCT DATA", id);
       const updatedProduct = await this.products.findOneAndUpdate({
         _id: id,
       }, {
@@ -52,6 +50,16 @@ class ProductService {
       });
 
       return updatedProduct;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async removeProduct(id: string) {
+    try {
+      const response = await this.products.deleteOne({ _id: id });
+
+      return response.deletedCount;
     } catch (error) {
       throw error;
     }

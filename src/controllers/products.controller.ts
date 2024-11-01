@@ -17,15 +17,37 @@ class ProductController {
 
   public createProduct = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // logic to create new product
-    } catch (error: unknown) {
+      const { description, image, price, quantity, title, type } = req.body;
+      const response = await this.productsService.createProduct({
+        description,
+        image,
+        price,
+        quantity,
+        title,
+        type,
+      });
 
+      const newProduct = {
+        id: response._id,
+        description: response.description,
+        image: response.image,
+        price: response.price,
+        quantity: response.quantity,
+        title: response.title,
+        type: response.type,
+      }
+
+      res.status(201).json({
+        message: "OK",
+        newProduct: newProduct,
+      });
+    } catch (error: unknown) {
+      console.error(`[ERROR] - ${error}`);
     }
   }
 
   public updateProduct = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // create a script to update a local file to a server
       const id = req.params.id;
       const { description, price, quantity, title, type } = req.body;
       const updatedProduct = await this.productsService.updateProduct(
@@ -42,9 +64,23 @@ class ProductController {
       res.status(200).json({
         message: "OK",
         updatedProduct: updatedProduct
-      })
+      });
     } catch (error) {
       console.error(`[ERROR] - ${error}`);
+    }
+  }
+
+  public removeProduct = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = req.params.id;
+
+      const deletedCount = await this.productsService.removeProduct(id);
+
+      deletedCount > 0 ? res.status(200).json({
+        id: id,
+      }) : res.status(400);
+    } catch (error) {
+      
     }
   }
 }
