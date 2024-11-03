@@ -20,13 +20,22 @@ class OrdersService {
 
   public async getOrdersByDate(date: Date): Promise<Order[]> {
     // add try catch
-    const orders = await this.orders.find({
-      date: {
-        $gte: format(startOfDay(date), "yyyy-MM-dd'T'HH:mm:ss"),
-        $lte: format(endOfDay(date), "yyyy-MM-dd'T'HH:mm:ss")
-      }
-    });
-    return orders;
+    try {
+      console.log("DATE", date);
+      console.log("INITIAL DATE", format(startOfDay(date), "yyyy-MM-dd'T'HH:mm:ss"));
+      console.log("END DATE", format(endOfDay(date), "yyyy-MM-dd'T'HH:mm:ss"));
+
+      const orders = await this.orders.find({
+        date: {
+          $gte: format(startOfDay(date), "yyyy-MM-dd'T'HH:mm:ss"),
+          $lte: format(endOfDay(date), "yyyy-MM-dd'T'HH:mm:ss")
+        }
+      });
+
+      return orders;
+    } catch (error) {
+      throw error;
+    }
   }
 
   public async getOrdersByStatus(status: string): Promise<Order[]> {
