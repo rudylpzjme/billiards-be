@@ -1,4 +1,3 @@
-import { Date } from "mongoose";
 import { Product } from "./products.model";
 
 export interface Cart {
@@ -7,7 +6,7 @@ export interface Cart {
 }
 
 export interface Order {
-  _id: string,
+  _id?: string,
   name: string,
   date: Date,
   status: string,

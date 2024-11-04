@@ -48,7 +48,8 @@ class OrderController {
     try {
       const order = {
         name: req.body.name,
-        date: req.body.date,
+        // date: req.body.date,
+        date: toZonedTime(req.body.date, 'America/Mexico_City'),
         status: req.body.status,
         cart: {
           line_items: req.body.cart.lineItems,
