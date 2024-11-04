@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import OrderService from "../services/orders.service";
 import { Cart, Order } from "../models/order.model";
 import ProductService from "../services/products.service";
+import { toZonedTime } from 'date-fns-tz';
 
 class OrderController {
   private ordersService = new OrderService();
@@ -19,7 +20,9 @@ class OrderController {
 
   public getOrdersByDate = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log("INCOMING DATE", req.params.date);
       const date = new Date(req.params.date);
+      console.log("Zoned time", toZonedTime(date, 'America/Mexico_City'));
       const orders: Order[] = await this.ordersService.getOrdersByDate(date);
 
       res.status(200).json({ data: orders, message: 'getOrderByDate' })
