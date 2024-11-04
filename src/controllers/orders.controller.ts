@@ -23,7 +23,7 @@ class OrderController {
       console.log("INCOMING DATE", req.params.date);
       const date = new Date(req.params.date);
       console.log("Zoned time", toZonedTime(date, 'America/Mexico_City'));
-      const orders: Order[] = await this.ordersService.getOrdersByDate(date);
+      const orders: Order[] = await this.ordersService.getOrdersByDate(toZonedTime(date, 'America/Mexico_City'));
 
       res.status(200).json({ data: orders, message: 'getOrderByDate' })
     } catch (error: unknown) {
