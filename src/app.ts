@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import { config } from "./configs/config";
 import session from "express-session";
 import { inititializePassportStrategy } from "./configs/passport";
+import path from "path";
 
 class App {
   public app: express.Application;
@@ -17,7 +18,7 @@ class App {
   constructor(routes: Routes[]) {
     dotenv.config();
     this.app = express();
-    this.port = config.server.port;
+    this.port = config.port;
 
     this.app.use(cors({
       origin: this.allowedOrigins
@@ -28,6 +29,10 @@ class App {
       resave: false,
       saveUninitialized: false
     }));
+    // this.app.use(express.static(path.join(__dirname, 'dist')));
+    // this.app.get('*', (req, res) => {
+    //   res.sendFile(path.join(__dirname, 'index.html'));
+    // })
 
     this.connectToDatabase();
     this.initializeRoutes(routes);
@@ -58,7 +63,8 @@ class App {
 
   private async connectToDatabase() {
     try {
-      const uri = "mongodb+srv://rudylpzjme:465-austin@cluster0.02otob3.mongodb.net/billiards-pos?retryWrites=true&w=majority&appName=Cluster0";
+      const uri = `${config.db.host}://${config.db.username}:${config.db.password}@cluster0.02otob3.mongodb.net/${config.db.name}?retryWrites=true&w=majority`;
+      console.log("URI", uri);
       await connect(uri)
       console.log("Database connection sucessful")
     } catch(error: unknown) {
