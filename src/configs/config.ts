@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = process.env.PORT || 3001;
+console.log("ENVIRONMENT", process.env.NODE_ENV);
 
 export const config = {
   port: process.env.NODE_APP_PORT || 3001,

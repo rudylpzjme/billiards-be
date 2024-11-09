@@ -64,11 +64,10 @@ class App {
   private async connectToDatabase() {
     try {
       const uri = `${config.db.host}://${config.db.username}:${config.db.password}@cluster0.02otob3.mongodb.net/${config.db.name}?retryWrites=true&w=majority`;
-      console.log("URI", uri);
-      await connect(uri)
-      console.log("Database connection sucessful")
+      await connect(uri);
+      console.log("Database connection sucessful");
     } catch(error: unknown) {
-      console.error(`ERROR: ${error}`)
+      console.error(`ERROR: ${error}`);
     }
   }
 
