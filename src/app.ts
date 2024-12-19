@@ -6,8 +6,7 @@ import { Routes } from "./interfaces/routes.interfaces";
 import dotenv from 'dotenv'; 
 import { config } from "./configs/config";
 import session from "express-session";
-import { inititializePassportStrategy } from "./configs/passport";
-import path from "path";
+import passport from "./middlewares/passport";
 
 class App {
   public app: express.Application;
@@ -24,19 +23,17 @@ class App {
       origin: this.allowedOrigins
     }));
     this.app.use(bodyParser.json());
+    
     this.app.use(session({
-      secret: "This is a secret",
+      secret: "This is a secret",// create a secret for prod
       resave: false,
       saveUninitialized: false
     }));
-    // this.app.use(express.static(path.join(__dirname, 'dist')));
-    // this.app.get('*', (req, res) => {
-    //   res.sendFile(path.join(__dirname, 'index.html'));
-    // })
+    this.app.use(passport.initialize());
+    this.app.use(passport.session());
 
     this.connectToDatabase();
     this.initializeRoutes(routes);
-    inititializePassportStrategy(this.app);
   }
 
   public listen() {

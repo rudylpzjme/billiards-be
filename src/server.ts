@@ -2,6 +2,7 @@
 
 import App from "./app";
 import IndexRoute from "./routes/index.route";
+import AuthRoutes from "./routes/auth.route"; 
 import OrderRoutes from "./routes/orders.routes";
 import ProductRoutes from "./routes/products.routes";
 import UsersRoute from "./routes/users.routes";
@@ -17,5 +18,11 @@ import UsersRoute from "./routes/users.routes";
 //   console.log(`Server running at http://localhost:${port}`);
 // });
 
-const app = new App([new IndexRoute(), new UsersRoute(), new ProductRoutes(), new OrderRoutes()])
+const app = new App([
+  new IndexRoute(),
+  new AuthRoutes(),
+  new UsersRoute(),
+  new ProductRoutes(),
+  new OrderRoutes(),
+])
 app.listen()

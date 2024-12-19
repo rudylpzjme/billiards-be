@@ -52,12 +52,6 @@ class UserService {
 
     return createUserData;
   }
-
-  public async login(): Promise<boolean> {
-
-    // passport
-    return true;
-  }
 }
 
 export default UserService;
